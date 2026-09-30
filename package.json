@@ -1,0 +1,2 @@
+{"name":"nova-digital-menu","version":"1.0.0","description":"Nova Digital Menu: QR ordering, kitchen and bar dashboards, admin panel","main":"server.js","scripts":{"start":"node start.js"},"engines":{"node":">=22.5"},
+"dependencies":{"bcryptjs":"^2.4.3","express":"^4.19.2","jsonwebtoken":"^9.0.2"}}
