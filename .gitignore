@@ -1,7 +1,6 @@
- 
-node_modules/
-build/
-dist/
+node_modules
+nova.db
+nova.db-shm
+nova.db-wal
+uploads
 .env
-.DS_Store
-npm-debug.log*

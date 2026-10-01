@@ -25,7 +25,7 @@ const fs=require('fs');
 const UP=process.env.UPLOAD_DIR||path.join(process.env.DB_PATH?path.dirname(process.env.DB_PATH):__dirname,'uploads');fs.mkdirSync(UP,{recursive:true});
 const rmImg=u=>{if(u&&u.startsWith('/uploads/'))db.prepare('DELETE FROM imgs WHERE name=?').run(path.basename(u))};
 const bk=require('./backup')(db,process.env.DB_PATH||path.join(__dirname,'nova.db'));
-const app=express();app.set('trust proxy',1);app.use((q,r,n)=>{if(q.method!=='GET')r.on('finish',()=>{if(r.statusCode<400)bk.schedule()});n()});app.use(express.json({limit:'50kb'}));
+const app=express();app.set('trust proxy',1);app.get('/backup-status',(q,r)=>r.json({backup:bk.state.on?'ON':'OFF - data will be lost on restart',lastSaved:bk.state.lastSaved,problem:bk.state.error}));app.use((q,r,n)=>{if(q.method!=='GET')r.on('finish',()=>{if(r.statusCode<400)bk.schedule()});n()});app.use(express.json({limit:'50kb'}));
 const clients=new Set(),ping=()=>clients.forEach(c=>c.write('data: 1\n\n'));
 setInterval(()=>clients.forEach(c=>c.write(': ping\n\n')),25000);
 const hits={};const limited=(ip,max)=>{const n=Date.now(),a=(hits[ip]=(hits[ip]||[]).filter(t=>n-t<6e5));a.push(n);return a.length>max};
